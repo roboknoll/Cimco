@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SharedDataSet xmlns="http://schemas.microsoft.com/sqlserver/reporting/2010/01/shareddatasetdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <DataSet Name="DataSet1">
+    <Query>
+      <DataSourceReference>CIMCO</DataSourceReference>
+      <DataSetParameters>
+        <DataSetParameter Name="@workcenter">
+          <ReadOnly>false</ReadOnly>
+          <Nullable>false</Nullable>
+          <OmitFromQuery>false</OmitFromQuery>
+          <rd:DbType>Object</rd:DbType>
+        </DataSetParameter>
+      </DataSetParameters>
+      <CommandText>SELECT DISTINCT
+	machine AS MachineNo,
+	machinevar1 AS MachineDescription,
+	dncmaxgroupname AS Workcenter
+FROM 
+	[CimcoNCBase].[dbo].[machines]
+WHERE
+	[dncmaxgroupname] IN (@workcenter)
+ORDER BY
+	[machine]</CommandText>
+    </Query>
+    <Fields>
+      <Field Name="MachineNo">
+        <DataField>MachineNo</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+      <Field Name="MachineDescription">
+        <DataField>MachineDescription</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+      <Field Name="Workcenter">
+        <DataField>Workcenter</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+    </Fields>
+  </DataSet>
+</SharedDataSet>

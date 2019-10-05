@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RptDataSource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="CIMCO">
+  <ConnectionProperties>
+    <Extension>SQL</Extension>
+    <ConnectString>Data Source=SKPBA01SQL\SQLHotel;Initial Catalog=CimcoMDC</ConnectString>
+  </ConnectionProperties>
+  <DataSourceID>02e6c620-4eee-423a-9402-f18c6e913dfc</DataSourceID>
+</RptDataSource>

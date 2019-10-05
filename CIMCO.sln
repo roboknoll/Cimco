@@ -1,0 +1,45 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2036
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{F14B399A-7131-4C87-9E4B-1186C45EF12D}") = "SSRS - CIMCO", "SSRS - CIMCO\SSRS - CIMCO.rptproj", "{BF150C45-0423-49A5-800A-5744F70E6793}"
+EndProject
+Project("{159641D6-6404-4A2A-AE62-294DE0FE8301}") = "SSIS - Cimco ETL", "SSIS - Cimco ETL\SSIS - Cimco ETL.dtproj", "{8AC00484-2410-402B-B117-4853957D7B6C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		DebugLocal|Any CPU = DebugLocal|Any CPU
+		Development|Any CPU = Development|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BF150C45-0423-49A5-800A-5744F70E6793}.Debug|Any CPU.ActiveCfg = Debug
+		{BF150C45-0423-49A5-800A-5744F70E6793}.Debug|Any CPU.Build.0 = Debug
+		{BF150C45-0423-49A5-800A-5744F70E6793}.Debug|Any CPU.Deploy.0 = Debug
+		{BF150C45-0423-49A5-800A-5744F70E6793}.DebugLocal|Any CPU.ActiveCfg = DebugLocal
+		{BF150C45-0423-49A5-800A-5744F70E6793}.DebugLocal|Any CPU.Build.0 = DebugLocal
+		{BF150C45-0423-49A5-800A-5744F70E6793}.DebugLocal|Any CPU.Deploy.0 = DebugLocal
+		{BF150C45-0423-49A5-800A-5744F70E6793}.Development|Any CPU.ActiveCfg = 
+		{BF150C45-0423-49A5-800A-5744F70E6793}.Development|Any CPU.Build.0 = 
+		{BF150C45-0423-49A5-800A-5744F70E6793}.Development|Any CPU.Deploy.0 = 
+		{BF150C45-0423-49A5-800A-5744F70E6793}.Release|Any CPU.ActiveCfg = Release
+		{BF150C45-0423-49A5-800A-5744F70E6793}.Release|Any CPU.Build.0 = Release
+		{BF150C45-0423-49A5-800A-5744F70E6793}.Release|Any CPU.Deploy.0 = Release
+		{8AC00484-2410-402B-B117-4853957D7B6C}.Debug|Any CPU.ActiveCfg = Development
+		{8AC00484-2410-402B-B117-4853957D7B6C}.Debug|Any CPU.Build.0 = Development
+		{8AC00484-2410-402B-B117-4853957D7B6C}.DebugLocal|Any CPU.ActiveCfg = Development
+		{8AC00484-2410-402B-B117-4853957D7B6C}.DebugLocal|Any CPU.Build.0 = Development
+		{8AC00484-2410-402B-B117-4853957D7B6C}.Development|Any CPU.ActiveCfg = Development
+		{8AC00484-2410-402B-B117-4853957D7B6C}.Development|Any CPU.Build.0 = Development
+		{8AC00484-2410-402B-B117-4853957D7B6C}.Release|Any CPU.ActiveCfg = Development
+		{8AC00484-2410-402B-B117-4853957D7B6C}.Release|Any CPU.Build.0 = Development
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {72810AD9-DCE3-45D7-91DE-292B5B0FE734}
+	EndGlobalSection
+EndGlobal

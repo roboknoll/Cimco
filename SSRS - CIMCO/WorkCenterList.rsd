@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SharedDataSet xmlns="http://schemas.microsoft.com/sqlserver/reporting/2010/01/shareddatasetdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <DataSet Name="DataSet1">
+    <Query>
+      <DataSourceReference>CIMCO</DataSourceReference>
+      <CommandText>SELECT DISTINCT
+	[dncmaxgroupname] AS WorkCenter
+FROM 
+	[CimcoNCBase].[dbo].[machines]
+ORDER BY
+	[dncmaxgroupname]</CommandText>
+    </Query>
+    <Fields>
+      <Field Name="WorkCenter">
+        <DataField>WorkCenter</DataField>
+        <rd:TypeName>System.String</rd:TypeName>
+      </Field>
+    </Fields>
+  </DataSet>
+</SharedDataSet>
