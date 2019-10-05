@@ -13,7 +13,12 @@
     <DataSet Name="MachineStatus">
       <Query>
         <DataSourceName>MachineStatus</DataSourceName>
-        <CommandText>;WITH MachineStatus AS
+        <QueryParameters>
+          <QueryParameter Name="@WorkCenter">
+            <Value>=Parameters!WorkCenter.Value</Value>
+          </QueryParameter>
+        </QueryParameters>
+        <CommandText>;WITH Statuses AS
 (
 SELECT
 	MachineID,
@@ -28,21 +33,26 @@ FROM
 	[dbo].[vw_actual_status]
 WHERE 	
 	CAST(GETDATE() AS DATE) = CAST([LastUpdate] AS DATE)
-
+	AND
+	WorkCenter IN (@WorkCenter)
 )
-SELECT ProcessStatus, COUNT(ProcessStatus) AS [StatusCounter]
-FROM MachineStatus
-GROUP BY ProcessStatus
-ORDER BY ProcessStatus</CommandText>
+SELECT MachineStatus, ProcessStatus, COUNT(*) AS [StatusCounter]
+FROM Statuses
+GROUP BY MachineStatus, ProcessStatus
+</CommandText>
       </Query>
       <Fields>
-        <Field Name="StatusCounter">
-          <DataField>StatusCounter</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
+        <Field Name="MachineStatus">
+          <DataField>MachineStatus</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="ProcessStatus">
           <DataField>ProcessStatus</DataField>
           <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="StatusCounter">
+          <DataField>StatusCounter</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
       </Fields>
     </DataSet>
@@ -59,26 +69,37 @@ FROM [dbo].[vw_actual_status]</CommandText>
         </Field>
       </Fields>
     </DataSet>
+    <DataSet Name="WorkCenterList">
+      <SharedDataSet>
+        <SharedDataSetReference>WorkCenterList</SharedDataSetReference>
+      </SharedDataSet>
+      <Fields>
+        <Field Name="WorkCenter">
+          <DataField>WorkCenter</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
   </DataSets>
   <ReportSections>
     <ReportSection>
       <Body>
         <ReportItems>
-          <Chart Name="Chart1">
+          <Chart Name="Chart2">
             <ChartCategoryHierarchy>
               <ChartMembers>
                 <ChartMember>
-                  <Group Name="Chart1_CategoryGroup">
+                  <Group Name="Chart2_CategoryGroup">
                     <GroupExpressions>
-                      <GroupExpression>=Fields!ProcessStatus.Value</GroupExpression>
+                      <GroupExpression>=Fields(Parameters!GroupBy.Value).Value</GroupExpression>
                     </GroupExpressions>
                   </Group>
                   <SortExpressions>
                     <SortExpression>
-                      <Value>=Fields!ProcessStatus.Value</Value>
+                      <Value>=Fields!MachineStatus.Value</Value>
                     </SortExpression>
                   </SortExpressions>
-                  <Label>=Fields!ProcessStatus.Value</Label>
+                  <Label>=Fields(Parameters!GroupBy.Value).Value</Label>
                 </ChartMember>
               </ChartMembers>
             </ChartCategoryHierarchy>
@@ -99,8 +120,32 @@ FROM [dbo].[vw_actual_status]</CommandText>
                       </ChartDataPointValues>
                       <ChartDataLabel>
                         <Style />
+                        <UseValueAsLabel>true</UseValueAsLabel>
+                        <Visible>true</Visible>
                       </ChartDataLabel>
-                      <Style />
+                      <Style>
+                        <Color>= IIF(Parameters!GroupBy.Value = "MachineStatus",
+switch
+(
+Fields!MachineStatus.Value = "OFFLINE", "Red",
+Fields!MachineStatus.Value = "IDLE", "Yellow",
+Fields!MachineStatus.Value = "ACTIVE", "Green"
+),
+switch
+(
+Fields!ProcessStatus.Value = "Obrabanie", "Green",
+Fields!ProcessStatus.Value = "Stroj zapnuty necinny", "Yellow",
+Fields!ProcessStatus.Value = "Stroj bez planu", "Khaki",
+Fields!ProcessStatus.Value = "Meranie kusov", "PaleGoldenrod",
+Fields!ProcessStatus.Value = "Porucha stroja", "Red",
+Fields!ProcessStatus.Value = "Stroj vypnuty", "Tomato",
+Fields!ProcessStatus.Value = "Vypadok energii", "HotPink",
+Fields!ProcessStatus.Value = "Zlomeny nastroj", "Blue",
+Fields!ProcessStatus.Value = "Ina pricina", "LightGrey",
+True, "LightGrey"
+)
+)</Color>
+                      </Style>
                       <ChartMarker>
                         <Style />
                       </ChartMarker>
@@ -353,9 +398,14 @@ FROM [dbo].[vw_actual_status]</CommandText>
                     </ChartAxisScaleBreak>
                   </ChartAxis>
                 </ChartValueAxes>
+                <ChartThreeDProperties>
+                  <Enabled>true</Enabled>
+                  <Inclination>60</Inclination>
+                </ChartThreeDProperties>
                 <Style>
                   <BackgroundColor>#00ffffff</BackgroundColor>
                   <BackgroundGradientType>None</BackgroundGradientType>
+                  <BackgroundHatchType>None</BackgroundHatchType>
                 </Style>
               </ChartArea>
             </ChartAreas>
@@ -377,11 +427,21 @@ FROM [dbo].[vw_actual_status]</CommandText>
                 <ColumnSeparatorColor>Black</ColumnSeparatorColor>
               </ChartLegend>
             </ChartLegends>
-            <ChartCustomPaletteColors>
-              <ChartCustomPaletteColor>Red</ChartCustomPaletteColor>
-              <ChartCustomPaletteColor>SeaGreen</ChartCustomPaletteColor>
-              <ChartCustomPaletteColor>Gold</ChartCustomPaletteColor>
-            </ChartCustomPaletteColors>
+            <ChartTitles>
+              <ChartTitle Name="Default">
+                <Caption>=Parameters!GroupBy.Label</Caption>
+                <Style>
+                  <BackgroundGradientType>None</BackgroundGradientType>
+                  <FontFamily>Arial</FontFamily>
+                  <FontSize>12pt</FontSize>
+                  <FontWeight>Bold</FontWeight>
+                  <TextAlign>Left</TextAlign>
+                  <VerticalAlign>Top</VerticalAlign>
+                </Style>
+                <Position>TopLeft</Position>
+              </ChartTitle>
+            </ChartTitles>
+            <Palette>Pacific</Palette>
             <ChartBorderSkin>
               <Style>
                 <BackgroundColor>Gray</BackgroundColor>
@@ -399,7 +459,7 @@ FROM [dbo].[vw_actual_status]</CommandText>
               </Style>
             </ChartNoDataMessage>
             <DataSetName>MachineStatus</DataSetName>
-            <Height>10cm</Height>
+            <Height>10.00001cm</Height>
             <Width>19cm</Width>
             <Style>
               <Border>
@@ -417,7 +477,7 @@ FROM [dbo].[vw_actual_status]</CommandText>
       <Width>19cm</Width>
       <Page>
         <PageHeader>
-          <Height>3.6cm</Height>
+          <Height>3.5cm</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
@@ -477,7 +537,9 @@ FROM [dbo].[vw_actual_status]</CommandText>
                   <TextRuns>
                     <TextRun>
                       <Value>="Last update: " &amp; First(Fields!LastUpdate.Value, "LastUpdate")</Value>
-                      <Style />
+                      <Style>
+                        <FontSize>9pt</FontSize>
+                      </Style>
                     </TextRun>
                   </TextRuns>
                   <Style>
@@ -485,10 +547,43 @@ FROM [dbo].[vw_actual_status]</CommandText>
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>3cm</Top>
+              <Top>2.9cm</Top>
+              <Left>13.31cm</Left>
               <Height>0.6cm</Height>
-              <Width>9.5cm</Width>
+              <Width>5.69cm</Width>
               <ZIndex>2</ZIndex>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
+              </Style>
+            </Textbox>
+            <Textbox Name="Textbox1">
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>="Workcenter(s): " &amp; Join(Parameters!WorkCenter.Value, ",")</Value>
+                      <Style>
+                        <FontFamily>Arial</FontFamily>
+                        <FontSize>9pt</FontSize>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style />
+                </Paragraph>
+              </Paragraphs>
+              <rd:DefaultName>Textbox1</rd:DefaultName>
+              <Top>2.3cm</Top>
+              <Height>0.6cm</Height>
+              <Width>19cm</Width>
+              <ZIndex>3</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -517,10 +612,63 @@ FROM [dbo].[vw_actual_status]</CommandText>
       </Page>
     </ReportSection>
   </ReportSections>
+  <ReportParameters>
+    <ReportParameter Name="WorkCenter">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <DataSetReference>
+          <DataSetName>WorkCenterList</DataSetName>
+          <ValueField>WorkCenter</ValueField>
+        </DataSetReference>
+      </DefaultValue>
+      <Prompt>WorkCenter(s):</Prompt>
+      <ValidValues>
+        <DataSetReference>
+          <DataSetName>WorkCenterList</DataSetName>
+          <ValueField>WorkCenter</ValueField>
+          <LabelField>WorkCenter</LabelField>
+        </DataSetReference>
+      </ValidValues>
+      <MultiValue>true</MultiValue>
+    </ReportParameter>
+    <ReportParameter Name="GroupBy">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>MachineStatus</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>Group By:</Prompt>
+      <ValidValues>
+        <ParameterValues>
+          <ParameterValue>
+            <Value>MachineStatus</Value>
+            <Label>Machine Status</Label>
+          </ParameterValue>
+          <ParameterValue>
+            <Value>ProcessStatus</Value>
+            <Label>Process Status</Label>
+          </ParameterValue>
+        </ParameterValues>
+      </ValidValues>
+    </ReportParameter>
+  </ReportParameters>
   <ReportParametersLayout>
     <GridLayoutDefinition>
       <NumberOfColumns>4</NumberOfColumns>
-      <NumberOfRows>2</NumberOfRows>
+      <NumberOfRows>1</NumberOfRows>
+      <CellDefinitions>
+        <CellDefinition>
+          <ColumnIndex>0</ColumnIndex>
+          <RowIndex>0</RowIndex>
+          <ParameterName>WorkCenter</ParameterName>
+        </CellDefinition>
+        <CellDefinition>
+          <ColumnIndex>1</ColumnIndex>
+          <RowIndex>0</RowIndex>
+          <ParameterName>GroupBy</ParameterName>
+        </CellDefinition>
+      </CellDefinitions>
     </GridLayoutDefinition>
   </ReportParametersLayout>
   <Language>=User!Language</Language>
