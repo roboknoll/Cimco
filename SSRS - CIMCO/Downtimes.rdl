@@ -1378,6 +1378,7 @@ ORDER BY
                   </TablixMembers>
                   <FixedData>true</FixedData>
                   <KeepWithGroup>After</KeepWithGroup>
+                  <RepeatOnNewPage>true</RepeatOnNewPage>
                 </TablixMember>
                 <TablixMember>
                   <Group Name="Workcenter">
