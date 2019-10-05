@@ -1376,6 +1376,7 @@ ORDER BY
                       </TablixMembers>
                     </TablixMember>
                   </TablixMembers>
+                  <FixedData>true</FixedData>
                   <KeepWithGroup>After</KeepWithGroup>
                 </TablixMember>
                 <TablixMember>

@@ -722,7 +722,6 @@ ORDER BY
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
@@ -2062,6 +2061,7 @@ ORDER BY
                       </TablixMembers>
                     </TablixMember>
                   </TablixMembers>
+                  <FixedData>true</FixedData>
                   <KeepWithGroup>After</KeepWithGroup>
                 </TablixMember>
                 <TablixMember>
@@ -2398,7 +2398,7 @@ ORDER BY
             <Top>12.5cm</Top>
             <Left>0.29633cm</Left>
             <Height>2.5cm</Height>
-            <Width>18.70367cm</Width>
+            <Width>18.70366cm</Width>
             <ZIndex>1</ZIndex>
             <Style>
               <Border>
