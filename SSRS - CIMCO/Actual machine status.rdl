@@ -32,14 +32,15 @@ SELECT
 FROM
 	[dbo].[vw_actual_status]
 WHERE 	
+	CIMCO_State = 'OPENED'
+	AND
 	CAST(GETDATE() AS DATE) = CAST([LastUpdate] AS DATE)
 	AND
 	WorkCenter IN (@WorkCenter)
 )
 SELECT MachineStatus, ProcessStatus, COUNT(*) AS [StatusCounter]
 FROM Statuses
-GROUP BY MachineStatus, ProcessStatus
-</CommandText>
+GROUP BY MachineStatus, ProcessStatus</CommandText>
       </Query>
       <Fields>
         <Field Name="MachineStatus">
@@ -635,7 +636,7 @@ True, "LightGrey"
       <DataType>String</DataType>
       <DefaultValue>
         <Values>
-          <Value>MachineStatus</Value>
+          <Value>ProcessStatus</Value>
         </Values>
       </DefaultValue>
       <Prompt>Group By:</Prompt>
